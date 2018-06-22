@@ -1,2 +1,0 @@
-# habits-app
-Habits App
