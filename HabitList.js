@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableHighlight, FlatList, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, TouchableHighlight, FlatList, View } from 'react-native';
+import { Ionicons as Icon } from '@expo/vector-icons';
 
 export default class HabitList extends React.Component {
     constructor(props) {
@@ -40,30 +41,41 @@ export default class HabitList extends React.Component {
             />
         );
       };
+
+      static navigationOptions = {
+        drawerLabel: 'List'
+      };
     
       render() {
         return (
-            <FlatList style={styles.list}
-              data={this.state.data}
-              renderItem={({ item }) => (
-                <TouchableHighlight>
-                  <View style={styles.box}>
-                    <View style={styles.textBackground}>
-                      <Text style={styles.boxTitle}>{item.text}</Text>
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                    this.props.navigation.toggleDrawer();
+                }}>
+                <Icon name="md-menu" size={30} />
+              </TouchableOpacity>
+              <FlatList style={styles.list}
+                data={this.state.data}
+                renderItem={({ item }) => (
+                  <TouchableHighlight>
+                    <View style={styles.box}>
+                      <View style={styles.textBackground}>
+                        <Text style={styles.boxTitle}>{item.text}</Text>
+                      </View>
                     </View>
-                  </View>
-                </TouchableHighlight>
-              )}
-              ItemSeparatorComponent={this.separator}
-              keyExtractor={item => item.text}
-            />
+                  </TouchableHighlight>
+                )}
+                ItemSeparatorComponent={this.separator}
+                keyExtractor={item => item.text}
+              />
+            </View>
         );
       }
     }
     
     const styles = StyleSheet.create({
       list: {
-        flex: 1,
         backgroundColor: '#eaf0f9',
         paddingLeft: 6,
         paddingRight: 6
