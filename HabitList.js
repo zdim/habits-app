@@ -49,7 +49,6 @@ export default class HabitList extends React.Component {
       render() {
         return (
           <View>
-              <Text onPress={() => this.props.navigation.toggleDrawer()}>Menu</Text>
               <FlatList style={styles.list}
                 data={this.state.data}
                 renderItem={({ item }) => (

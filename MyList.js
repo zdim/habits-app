@@ -28,7 +28,6 @@ export default class MyList extends React.Component {
       render() {
         return (
             <View style={styles.container}>
-              <Text onPress={() => this.props.navigation.toggleDrawer()}>Menu</Text>
               <Text>My List</Text>
               <FlatList style={styles.list}
                 data={this.state.data}

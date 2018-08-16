@@ -9,7 +9,6 @@ export default class DailyRoutine extends React.Component {
     render() {
         return (
             <View>
-            <Text onPress={() => this.props.navigation.toggleDrawer()}>Menu</Text>
             <Text>This is the daily routine</Text>
             </View>
         );

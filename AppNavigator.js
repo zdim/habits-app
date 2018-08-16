@@ -1,21 +1,29 @@
+
 import React from 'react'
 import { Text } from 'react-native'
-import {createStackNavigator} from 'react-navigation';
-import HomeScreen from './Home';
+import { createDrawerNavigator, createStackNavigator } from 'react-navigation';
 import HabitList from './HabitList';
+import MyList from './MyList';
+import HomeScreen from './Home';
+import DailyRoutine from './DailyRoutine';
+
+const Drawer = createDrawerNavigator({
+    Home: { screen: HomeScreen },
+    List: { screen: HabitList },
+    MyList: { screen: MyList },
+    Routine: { screen: DailyRoutine }
+})
 
 const Navigator = createStackNavigator({
-    Home: { screen: HomeScreen },
-    HabitList: { screen: HabitList }
+    Drawer: { name: 'Drawer', screen: Drawer }
 }, {
-    // Default
-    headerMode: 'float',
-    initialRouteName: 'Home',
     navigationOptions: ({navigation}) => ({
-        headerStyle: {backgroundColor: 'white'},
+        headerStyle: { backgroundColor: 'teal' },
         title: 'Habits',
-        headerLeft: <Text onPress={() => navigation.navigate('DrawerOpen')}>Menu</Text>
+        headerTintColor: 'white',
+        headerLeft: <Text onPress={() => navigation.toggleDrawer()}>Menu</Text>
       })
-})
+    }
+);
 
 export default Navigator
