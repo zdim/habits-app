@@ -6,6 +6,7 @@ import HabitList from './HabitList';
 import MyList from './MyList';
 import HomeScreen from './Home';
 import DailyRoutine from './DailyRoutine';
+import LoginScreen from './Login';
 
 const Drawer = createDrawerNavigator({
     Home: { screen: HomeScreen },
@@ -14,7 +15,7 @@ const Drawer = createDrawerNavigator({
     Routine: { screen: DailyRoutine }
 })
 
-const Navigator = createStackNavigator({
+const ScreenNavigator = createStackNavigator({
     Drawer: { name: 'Drawer', screen: Drawer }
 }, {
     navigationOptions: ({navigation}) => ({
@@ -26,4 +27,9 @@ const Navigator = createStackNavigator({
     }
 );
 
-export default Navigator
+const MainNavigator = createStackNavigator({
+    Login: { name: 'Login', screen: LoginScreen },
+    Navigator: { name: 'Navigator', screen: ScreenNavigator }
+});
+
+export default MainNavigator
