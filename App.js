@@ -1,7 +1,7 @@
 import React from 'react';
 import * as firebase from 'firebase';
 import { StyleSheet, View, StatusBar } from 'react-native';
-import AppNavigator from './AppNavigator';
+import MainNavigator from './AppNavigator';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCX0-WZmaG_aL6HEfmnn7cj4RS_JNp-fPE",
@@ -17,7 +17,7 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />        
-        <AppNavigator />
+        <MainNavigator screenProps={{firebase: firebaseApp}}/>
       </View>);
   }
 }

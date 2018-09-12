@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { Text } from 'react-native'
-import { createDrawerNavigator, createStackNavigator } from 'react-navigation';
+import { createDrawerNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import HabitList from './HabitList';
 import MyList from './MyList';
 import HomeScreen from './Home';
@@ -27,9 +27,12 @@ const ScreenNavigator = createStackNavigator({
     }
 );
 
-const MainNavigator = createStackNavigator({
+const MainNavigator = createSwitchNavigator({
     Login: { name: 'Login', screen: LoginScreen },
     Navigator: { name: 'Navigator', screen: ScreenNavigator }
+}, {
+    initialRouteName: 'Login',
+    headerMode: 'none'
 });
 
 export default MainNavigator
