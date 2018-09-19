@@ -7,12 +7,14 @@ import MyList from './MyList';
 import HomeScreen from './Home';
 import DailyRoutine from './DailyRoutine';
 import LoginScreen from './Login';
+import CalendarScreen from './Calendar';
 
 const Drawer = createDrawerNavigator({
     Home: { screen: HomeScreen },
     List: { screen: HabitList },
     MyList: { screen: MyList },
-    Routine: { screen: DailyRoutine }
+    Routine: { screen: DailyRoutine },
+    Calendar: { screen: CalendarScreen }
 })
 
 const ScreenNavigator = createStackNavigator({
