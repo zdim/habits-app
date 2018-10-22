@@ -12,10 +12,24 @@ export default class LoginScreen extends React.Component {
         header: null
       };
 
+    loginSuccessful = () => {
+        this.props.navigation.navigate('Navigator');
+    }
+
     register = (email, password) => {
         this.props.screenProps.firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(() => { this.props.navigation.navigate('Navigator'); })
-            .catch((error) => { Alert.alert(error.message, 'body'); });        
+            .then(() => { this.loginSuccessful(); })
+            .catch((error) => { Alert.alert(error.message); });        
+    }
+
+    logIn = (email, password) => {
+        this.props.screenProps.firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(() => { this.loginSuccessful(); })
+            .catch((error) => { Alert.alert(error.message); });
+    }
+
+    googleAuth = () => {
+        
     }
 
     render() {
@@ -23,22 +37,26 @@ export default class LoginScreen extends React.Component {
             <View style={styles.container}>
                 <TextInput style={styles.textFields}
                     placeholder='Email'
+                    autoCapitalize={'none'}
                     onChangeText={(text) => {this.setState({email: text})}}/>
                 <TextInput style={styles.textFields}
                     placeholder='Password'
                     secureTextEntry={true}
+                    autoCapitalize={'none'}
                     onChangeText={(text) => {this.setState({password: text})}}/>
                 <View style={styles.buttons}>
                     <Button
-                        onPress={() => { this.props.navigation.navigate('Navigator'); }}
+                        onPress={() => this.logIn(this.state.email, this.state.password)}
                         title='Sign In'
                         color='blue'/>
-                </View>
-                <View style={styles.buttons}>
                     <Button
                         onPress={() => this.register(this.state.email, this.state.password)}
                         title='Register'
                         color='blue'/>
+                    <Button
+                        onPress={() => this.googleAuth()}
+                        title='Sign in with Google'
+                        color='#db3236'/>
                 </View>
             </View>
         );
