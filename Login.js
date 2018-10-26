@@ -1,5 +1,27 @@
 import React from 'react';
 import { TextInput, Button, View, StyleSheet, Alert } from 'react-native';
+import Expo from 'expo';
+
+async function googleAuth() {
+    //372361244472-e7j8gckg29l6ns0vhk1aem28verf05bm.apps.googleusercontent.com android
+    //372361244472-o8r9sp9ftuu6ffb5amr5t58j56244k3t.apps.googleusercontent.com ios
+
+    try {
+        const result = await Expo.Google.logInAsync({
+            androidClientId: '372361244472-e7j8gckg29l6ns0vhk1aem28verf05bm.apps.googleusercontent.com',
+            iosClientId: '372361244472-o8r9sp9ftuu6ffb5amr5t58j56244k3t.apps.googleusercontent.com',
+            scopes: [ 'profile', 'email' ]
+        });
+
+        if(result.type === 'success') {
+            return result.accessToken;
+        } else {
+            return { canceled: true }
+        }
+    } catch(e) {
+        return { error: e };
+    }
+}
 
 export default class LoginScreen extends React.Component {
     constructor(props) {
@@ -28,9 +50,7 @@ export default class LoginScreen extends React.Component {
             .catch((error) => { Alert.alert(error.message); });
     }
 
-    googleAuth = () => {
-        
-    }
+    
 
     render() {
         return (
@@ -54,7 +74,7 @@ export default class LoginScreen extends React.Component {
                         title='Register'
                         color='blue'/>
                     <Button
-                        onPress={() => this.googleAuth()}
+                        onPress={() => googleAuth()}
                         title='Sign in with Google'
                         color='#db3236'/>
                 </View>
