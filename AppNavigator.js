@@ -6,16 +6,24 @@ import HabitList from './HabitList';
 import MyList from './MyList';
 import HomeScreen from './Home';
 import DailyRoutine from './DailyRoutine';
+import RoutineEvent from './RoutineEvent';
 import LoginScreen from './Login';
 import CalendarScreen from './Calendar';
+
+const RoutineNaviator = createStackNavigator({
+    Routine: { screen: DailyRoutine },
+    RoutineEvent: { screen: RoutineEvent }
+}, {
+    headerMode: 'none'
+});
 
 const Drawer = createDrawerNavigator({
     Home: { screen: HomeScreen },
     List: { screen: HabitList },
     MyList: { screen: MyList },
-    Routine: { screen: DailyRoutine },
+    Routine: { screen: RoutineNaviator },
     Calendar: { screen: CalendarScreen }
-})
+});
 
 const ScreenNavigator = createStackNavigator({
     Drawer: { name: 'Drawer', screen: Drawer }

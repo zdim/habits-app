@@ -29,6 +29,7 @@ export default class MyList extends React.Component {
         return (
             <View style={styles.container}>
               <Text>My List</Text>
+              <Text onPress={() => this.props.navigation.navigate('RoutineEvent')}>+ Add New</Text>
               <FlatList style={styles.list}
                 data={this.state.data}
                 renderItem={({ item }) => (

@@ -1,3 +1,4 @@
+require('./polyfill');
 import React from 'react';
 import * as firebase from 'firebase';
 import { StyleSheet, View, StatusBar } from 'react-native';
@@ -7,7 +8,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyCX0-WZmaG_aL6HEfmnn7cj4RS_JNp-fPE",
   authDomain: "habits-9ad15.firebaseapp.com",
   databaseURL: "https://habits-9ad15.firebaseio.com",
-  storageBucket: ""
+  storageBucket: "gs://habits-9ad15.appspot.com"
 };
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);

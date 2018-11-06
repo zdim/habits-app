@@ -1,6 +1,9 @@
 import React from 'react';
 import { TextInput, Button, View, StyleSheet, Alert } from 'react-native';
 import Expo from 'expo';
+import firebase from 'firebase'
+
+
 
 async function googleAuth() {
     //372361244472-e7j8gckg29l6ns0vhk1aem28verf05bm.apps.googleusercontent.com android
@@ -12,12 +15,7 @@ async function googleAuth() {
             iosClientId: '372361244472-o8r9sp9ftuu6ffb5amr5t58j56244k3t.apps.googleusercontent.com',
             scopes: [ 'profile', 'email' ]
         });
-
-        if(result.type === 'success') {
-            return result.accessToken;
-        } else {
-            return { canceled: true }
-        }
+        return result;        
     } catch(e) {
         return { error: e };
     }
@@ -50,7 +48,17 @@ export default class LoginScreen extends React.Component {
             .catch((error) => { Alert.alert(error.message); });
     }
 
-    
+    googleLogIn = () => {
+        googleAuth()
+            .then((result) => {
+                console.log(result);
+                const credential = this.props.screenProps.firebase.auth.GoogleAuthProvider.credential(result.idToken);
+                firebase.auth().signInAndRetrieveDataWithCredential(credential)
+                    .then(() => { this.loginSuccessful(); })
+                    .catch((error) => { Alert.alert(error.message); console.log(error); });
+            })
+            .catch((error) => { Alert.alert(error.message); console.log(error); });
+    }
 
     render() {
         return (
@@ -74,7 +82,7 @@ export default class LoginScreen extends React.Component {
                         title='Register'
                         color='blue'/>
                     <Button
-                        onPress={() => googleAuth()}
+                        onPress={() => this.googleLogIn()}
                         title='Sign in with Google'
                         color='#db3236'/>
                 </View>

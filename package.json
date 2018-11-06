@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "babel-polyfill": "^6.26.0",
     "eslint": "^4.19.1",
     "jest-expo": "~27.0.0",
     "react-native-scripts": "1.14.0",
