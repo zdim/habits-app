@@ -3,16 +3,14 @@ import { TextInput, Button, View, StyleSheet, Alert } from 'react-native';
 import Expo from 'expo';
 import firebase from 'firebase'
 
-
-
 async function googleAuth() {
-    //372361244472-e7j8gckg29l6ns0vhk1aem28verf05bm.apps.googleusercontent.com android
-    //372361244472-o8r9sp9ftuu6ffb5amr5t58j56244k3t.apps.googleusercontent.com ios
+    //1045720847021-o0dj2u79o0g3b9qkbals9554rabil6jj.apps.googleusercontent.com android
+    //1045720847021-3enffihs8ln47gjbpoofh01lhl2h6b3h.apps.googleusercontent.com ios
 
     try {
         const result = await Expo.Google.logInAsync({
-            androidClientId: '372361244472-e7j8gckg29l6ns0vhk1aem28verf05bm.apps.googleusercontent.com',
-            iosClientId: '372361244472-o8r9sp9ftuu6ffb5amr5t58j56244k3t.apps.googleusercontent.com',
+            androidClientId: '1045720847021-o0dj2u79o0g3b9qkbals9554rabil6jj.apps.googleusercontent.com',
+            iosClientId: '1045720847021-3enffihs8ln47gjbpoofh01lhl2h6b3h.apps.googleusercontent.com',
             scopes: [ 'profile', 'email' ]
         });
         return result;        
@@ -28,6 +26,7 @@ export default class LoginScreen extends React.Component {
 
         };
     }
+
     static navigationOptions = {
         header: null
       };
@@ -52,8 +51,8 @@ export default class LoginScreen extends React.Component {
         googleAuth()
             .then((result) => {
                 console.log(result);
-                const credential = this.props.screenProps.firebase.auth.GoogleAuthProvider.credential(result.idToken);
-                firebase.auth().signInAndRetrieveDataWithCredential(credential)
+                const credential = firebase.auth.GoogleAuthProvider.credential(result.idToken);
+                this.props.screenProps.firebase.auth().signInAndRetrieveDataWithCredential(credential)
                     .then(() => { this.loginSuccessful(); })
                     .catch((error) => { Alert.alert(error.message); console.log(error); });
             })

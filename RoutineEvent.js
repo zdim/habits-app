@@ -12,6 +12,7 @@ export default class RoutineEvent extends React.Component {
     }
 
     saveEvent = () => {
+        this.props.screenProps.firebase.writeUserData()
         this.props.navigation.goBack();
     }
 
@@ -24,10 +25,10 @@ export default class RoutineEvent extends React.Component {
                     onChangeText={(text) => this.setState({name: text})}/>
                 <TextInput style={styles.textFields}
                     placeholder='Start Time'
-                    onChangeText={(text) => this.setState({name: startTime})}/>
+                    onChangeText={(text) => this.setState({startTime: text})}/>
                 <TextInput style={styles.textFields}
                     placeholder='End Time'
-                    onChangeText={(text) => this.setState({name: endTime})}/>
+                    onChangeText={(text) => this.setState({endTime: text})}/>
                 <View style={styles.buttons}>
                     <Button
                         onPress={() => this.saveEvent()}
