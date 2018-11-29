@@ -29,7 +29,7 @@ export default class LoginScreen extends React.Component {
 
     static navigationOptions = {
         header: null
-      };
+    };
 
     loginSuccessful = () => {
         this.props.navigation.navigate('Navigator');

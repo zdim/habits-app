@@ -1,33 +1,38 @@
 import React from 'react';
-import { Text, Button, View, FlatList, TouchableHighlight, StyleSheet } from 'react-native';
+import { Alert, Text, Button, View, FlatList, TouchableHighlight, StyleSheet } from 'react-native';
 
 export default class DailyRoutine extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            data: [
-                { name: 'Event 1' },
-                { name: 'Event 2' }
-            ]
+            data: []
         };
     };
 
     static navigationOptions = {
-        drawerLabel: 'Routine'
-      };
+      drawerLabel: 'Routine'
+    };
 
-      separator = () => {
-        return (
-          <View
-            style={{
-              height: 6,
-              width: '100%',
-              backgroundColor: '#eaf0f9'
-            }}
-            />
-        );
-      };
+    componentDidMount = () => {
+      this.props.screenProps.firebase.database().ref('users/').on('value', 
+        (snapshot) => {
+          console.log(snapshot.val());
+          this.setState({ data: Object.values(snapshot.val()) });
+        });
+    };
+
+    separator = () => {
+      return (
+        <View
+          style={{
+            height: 6,
+            width: '100%',
+            backgroundColor: '#eaf0f9'
+          }}
+          />
+      );
+    };
 
     render() {
         return (
