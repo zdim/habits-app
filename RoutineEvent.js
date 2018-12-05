@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
-import firebase from 'firebase';
 
 export default class RoutineEvent extends React.Component {
     constructor() {
@@ -13,9 +12,8 @@ export default class RoutineEvent extends React.Component {
     }
 
     saveEvent = () => {
-        const user = firebase.auth();
-
-        this.props.screenProps.firebase.database().ref('users/z').set({
+        const uid = this.props.screenProps.firebase.auth().currentUser.uid;
+        this.props.screenProps.firebase.database().ref('events/' + uid).push({
             name: this.state.name,
             startTime: this.state.startTime,
             endTime: this.state.endTime

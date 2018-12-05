@@ -15,10 +15,12 @@ export default class DailyRoutine extends React.Component {
     };
 
     componentDidMount = () => {
-      this.props.screenProps.firebase.database().ref('users/').on('value', 
+      const uid = this.props.screenProps.firebase.auth().currentUser.uid;
+      this.props.screenProps.firebase.database().ref('events/' + uid).on('value', 
         (snapshot) => {
           console.log(snapshot.val());
-          this.setState({ data: Object.values(snapshot.val()) });
+          if(snapshot.val())
+            this.setState({ data: Object.values(snapshot.val()) });
         });
     };
 

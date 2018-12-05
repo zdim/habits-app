@@ -31,19 +31,35 @@ export default class LoginScreen extends React.Component {
         header: null
     };
 
-    loginSuccessful = () => {
-        this.props.navigation.navigate('Navigator');
+    componentDidMount = () => {
+        // user is null if logged out - in which case, navigate back to this screen to login
+        // TODO: Move the user data creation to the individual sign-in methods since each method has different variables
+        firebase.auth().onAuthStateChanged(user => {
+            console.log(user);
+            if(user) {
+                const uid = user.uid;
+                if(firebase.database().ref('users/' + uid).once('value', (snapshot) => {
+                    if(!snapshot.hasChild(uid)) {
+                        firebase.database().ref('users/' + uid).set({
+                            email: user.email,
+                            name: user.displayName
+                        });
+                    }
+                }))
+                this.props.navigation.navigate('Navigator');
+            } else {
+                this.props.navigation.navigate('Login');
+            }            
+        });
     }
 
     register = (email, password) => {
         this.props.screenProps.firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(() => { this.loginSuccessful(); })
             .catch((error) => { Alert.alert(error.message); });        
     }
 
     logIn = (email, password) => {
         this.props.screenProps.firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(() => { this.loginSuccessful(); })
             .catch((error) => { Alert.alert(error.message); });
     }
 
@@ -53,7 +69,6 @@ export default class LoginScreen extends React.Component {
                 console.log(result);
                 const credential = firebase.auth.GoogleAuthProvider.credential(result.idToken);
                 this.props.screenProps.firebase.auth().signInAndRetrieveDataWithCredential(credential)
-                    .then(() => { this.loginSuccessful(); })
                     .catch((error) => { Alert.alert(error.message); console.log(error); });
             })
             .catch((error) => { Alert.alert(error.message); console.log(error); });
