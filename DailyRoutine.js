@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Text, Button, View, FlatList, TouchableHighlight, StyleSheet } from 'react-native';
+import { Text, Button, View, FlatList, TouchableHighlight, StyleSheet } from 'react-native';
 
 export default class DailyRoutine extends React.Component {
     constructor(props) {
@@ -47,7 +47,7 @@ export default class DailyRoutine extends React.Component {
               <FlatList style={styles.list}
                 data={this.state.data}
                 renderItem={({ item }) => (
-                  <TouchableHighlight>
+                  <TouchableHighlight onPress={() => {console.log(item)}}>
                     <View style={styles.box}>
                         <Text>{item.name}</Text>
                     </View>

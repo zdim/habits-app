@@ -9,10 +9,12 @@ import DailyRoutine from './DailyRoutine';
 import RoutineEvent from './RoutineEvent';
 import LoginScreen from './Login';
 import CalendarScreen from './Calendar';
+import TimePicker from './TimePicker';
 
 const RoutineNaviator = createStackNavigator({
     Routine: { screen: DailyRoutine },
-    RoutineEvent: { screen: RoutineEvent }
+    RoutineEvent: { screen: RoutineEvent },
+    TimePicker: { screen: TimePicker }
 }, {
     headerMode: 'none'
 });
