@@ -3,26 +3,38 @@ import { View, Text, Button, TextInput, StyleSheet, TimePickerAndroid, DatePicke
 import TimePicker from './TimePicker';
 
 export default class RoutineEvent extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        const params = props.navigation;
         this.state = {
-            name: '',
-            startTime: '00:00',
-            endTime: '00:00',
-            showStartTimePicker: false,
-            showEndTimePicker: false
-        };
+            id: params.getParam('id', null),
+            name: params.getParam('name', ''),
+            startTime: params.getParam('startTime', '00:00'),
+            endTime: params.getParam('endTime', '00:00'),
+            showEndTimePicker: false,
+            showStartTimePicker: false
+        }
     }
 
     saveEvent = () => {
         const uid = this.props.screenProps.firebase.auth().currentUser.uid;
-        this.props.screenProps.firebase.database().ref('events/' + uid).push({
-            name: this.state.name,
-            startTime: this.state.startTime,
-            endTime: this.state.endTime
-        }).then(() => {
-            this.props.navigation.goBack(); 
-        }).catch((e) => { console.log(e.message); });
+        if(this.state.id) {
+            this.props.screenProps.firebase.database().ref('events/' + uid + '/' + this.state.id).set({
+                name: this.state.name,
+                startTime: this.state.startTime,
+                endTime: this.state.endTime
+            }).then(() => {
+                this.props.navigation.goBack(); 
+            }).catch((e) => { console.log(e.message); });
+        } else {
+            this.props.screenProps.firebase.database().ref('events/' + uid).push({
+                name: this.state.name,
+                startTime: this.state.startTime,
+                endTime: this.state.endTime
+            }).then(() => {
+                this.props.navigation.goBack(); 
+            }).catch((e) => { console.log(e.message); });
+        }
     }
 
     openStartTimePicker = () => {
@@ -53,7 +65,9 @@ export default class RoutineEvent extends React.Component {
                 <View>
                     <TextInput style={styles.textFields}
                         placeholder='Name'
-                        onChangeText={(text) => this.setState({name: text})}/>
+                        onChangeText={(text) => this.setState({name: text})}>
+                        {this.state.name}
+                    </TextInput>
                     <View style={styles.dateBox}>
                         <Text onPress={() => {this.openStartTimePicker()}}>{this.state.startTime}</Text>
                     </View>

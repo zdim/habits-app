@@ -20,7 +20,7 @@ export default class DailyRoutine extends React.Component {
         (snapshot) => {
           console.log(snapshot.val());
           if(snapshot.val())
-            this.setState({ data: Object.values(snapshot.val()) });
+            this.setState({ data: Object.entries(snapshot.val()) });
         });
     };
 
@@ -41,20 +41,31 @@ export default class DailyRoutine extends React.Component {
             <View style={styles.container}>
               <Text style={styles.title}>This is the daily routine</Text>
               <Button 
-                onPress={() => this.props.navigation.navigate('RoutineEvent')}
+                onPress={() => {this.props.navigation.navigate('RoutineEvent', { 
+                    id: null,
+                    name: '',
+                    startTime: '00:00',
+                    endTime: '00:00' 
+                  });}}
                 title='Add New'
                 color='blue'/>
               <FlatList style={styles.list}
                 data={this.state.data}
                 renderItem={({ item }) => (
-                  <TouchableHighlight onPress={() => {console.log(item)}}>
+                  <TouchableHighlight onPress={() => { this.props.navigation.navigate('RoutineEvent', {
+                    id: item[0],
+                    name: item[1].name,
+                    startTime: item[1].startTime,
+                    endTime: item[1].endTime
+                  })}}>
                     <View style={styles.box}>
-                        <Text>{item.name}</Text>
+                        <Text>{item[1].name}</Text>
+                        <Text>{item[1].startTime + ' - ' + item[1].endTime}</Text>
                     </View>
                   </TouchableHighlight>
                 )}
                 ItemSeparatorComponent={this.separator}
-                keyExtractor={item => item.name}
+                keyExtractor={item => item[1].name}
               />
             </View>
         );

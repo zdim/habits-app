@@ -11,7 +11,7 @@ export default class TimePicker extends React.Component {
 
     savePicker = () => {
         console.log(this.state.time);
-        this.props.saveTime(this.state.time.getHours() + ':' + this.state.time.getMinutes());
+        this.props.saveTime(this.state.time.getHours().toString() + ':' + this.state.time.getMinutes().toString());
         this.props.closePicker();
     }
 

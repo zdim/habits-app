@@ -2,7 +2,7 @@ require('./polyfill');
 import React from 'react';
 import * as firebase from 'firebase';
 import { StyleSheet, View, StatusBar } from 'react-native';
-import MainNavigator from './AppNavigator';
+import MainNavigator from './Components/AppNavigator';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCX0-WZmaG_aL6HEfmnn7cj4RS_JNp-fPE",

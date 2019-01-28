@@ -1,12 +1,32 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Text, TouchableHighlight, FlatList, View } from 'react-native';
-import { Ionicons as Icon } from '@expo/vector-icons';
+import { StyleSheet, Text, TouchableHighlight, FlatList, View } from 'react-native';
 
-export default class MyList extends React.Component {
+export default class HabitList extends React.Component {
     constructor(props) {
         super(props);
-
-        this.state = {};
+    
+        this.state = {
+          data: [{
+            text: 'one',
+            color: '#000'
+          },
+          {
+            text: 'two',
+            color: '#000'
+          },
+          {
+            text: 'three',
+            color: '#000'
+          },
+          {
+            text: 'four',
+            color: '#000'
+          },
+          {
+            text: 'five',
+            color: '#000'
+          }]
+        };
       }
     
       separator = () => {
@@ -22,20 +42,20 @@ export default class MyList extends React.Component {
       };
 
       static navigationOptions = {
-        drawerLabel: 'My List'
+        drawerLabel: 'List'
       };
     
       render() {
         return (
-            <View style={styles.container}>
-              <Text>My List</Text>
-              <Text onPress={() => this.props.navigation.navigate('RoutineEvent')}>+ Add New</Text>
+          <View>
               <FlatList style={styles.list}
                 data={this.state.data}
                 renderItem={({ item }) => (
                   <TouchableHighlight>
                     <View style={styles.box}>
-                        <Text>{item.text}</Text>
+                      <View style={styles.textBackground}>
+                        <Text style={styles.boxTitle}>{item.text}</Text>
+                      </View>
                     </View>
                   </TouchableHighlight>
                 )}
@@ -51,6 +71,7 @@ export default class MyList extends React.Component {
       container: {
         flex: 1,
         backgroundColor: '#eaf0f9',
+        paddingTop: 20
     },
       list: {
         paddingLeft: 6,

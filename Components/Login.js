@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextInput, Button, View, StyleSheet, Alert } from 'react-native';
-import Expo from 'expo';
+import * as Expo from 'expo';
 import firebase from 'firebase'
 
 async function googleAuth() {

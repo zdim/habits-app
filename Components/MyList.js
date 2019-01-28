@@ -1,33 +1,11 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, Text, TouchableHighlight, FlatList, View } from 'react-native';
-import { Ionicons as Icon } from '@expo/vector-icons';
 
-export default class HabitList extends React.Component {
+export default class MyList extends React.Component {
     constructor(props) {
         super(props);
-    
-        this.state = {
-          data: [{
-            text: 'one',
-            color: '#000'
-          },
-          {
-            text: 'two',
-            color: '#000'
-          },
-          {
-            text: 'three',
-            color: '#000'
-          },
-          {
-            text: 'four',
-            color: '#000'
-          },
-          {
-            text: 'five',
-            color: '#000'
-          }]
-        };
+
+        this.state = {};
       }
     
       separator = () => {
@@ -43,20 +21,20 @@ export default class HabitList extends React.Component {
       };
 
       static navigationOptions = {
-        drawerLabel: 'List'
+        drawerLabel: 'My List'
       };
     
       render() {
         return (
-          <View>
+            <View style={styles.container}>
+              <Text>My List</Text>
+              <Text onPress={() => this.props.navigation.navigate('RoutineEvent')}>+ Add New</Text>
               <FlatList style={styles.list}
                 data={this.state.data}
                 renderItem={({ item }) => (
                   <TouchableHighlight>
                     <View style={styles.box}>
-                      <View style={styles.textBackground}>
-                        <Text style={styles.boxTitle}>{item.text}</Text>
-                      </View>
+                        <Text>{item.text}</Text>
                     </View>
                   </TouchableHighlight>
                 )}
@@ -72,7 +50,6 @@ export default class HabitList extends React.Component {
       container: {
         flex: 1,
         backgroundColor: '#eaf0f9',
-        paddingTop: 20
     },
       list: {
         paddingLeft: 6,
