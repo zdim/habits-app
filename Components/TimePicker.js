@@ -2,16 +2,21 @@ import React from 'react';
 import { View, StyleSheet, TimePickerAndroid, DatePickerIOS, Button, Platform } from 'react-native';
 
 export default class TimePicker extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        var time = props.selectedTime.split(":");
+        var hours = time[0];
+        var minutes = time[1];
+        var date = new Date();
+        date.setHours(hours, minutes);
         this.state = {
-            time: new Date()
+            time: date
         };
     }
 
     savePicker = () => {
         console.log(this.state.time);
-        this.props.saveTime(this.state.time.getHours().toString() + ':' + this.state.time.getMinutes().toString());
+        this.props.saveTime(this.state.time.toTimeString().split(' ')[0].slice(0, -3));
         this.props.closePicker();
     }
 

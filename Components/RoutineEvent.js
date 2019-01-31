@@ -84,16 +84,18 @@ export default class RoutineEvent extends React.Component {
                             title='Cancel'
                             color='grey' />
                     </View>
-                </View>
-                    : <TimePicker 
+                </View> : <TimePicker 
                         closePicker={this.closeTimePicker}
-                        saveTime={this.saveTime}/>}
+                        saveTime={this.saveTime}
+                        selectedTime={this.state.showStartTimePicker ? this.state.startTime : this.state.endTime}/>}
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    empty: {
+    },
     container: {
       flex: 1,
       backgroundColor: '#eaf0f9',
