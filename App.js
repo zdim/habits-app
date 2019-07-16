@@ -3,9 +3,10 @@ import React from 'react';
 import * as firebase from 'firebase';
 import { StyleSheet, View, StatusBar } from 'react-native';
 import MainNavigator from './Components/AppNavigator';
+import { FIREBASE_KEY } from 'react-native-dotenv';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCX0-WZmaG_aL6HEfmnn7cj4RS_JNp-fPE",
+  apiKey: FIREBASE_KEY,
   authDomain: "habits-9ad15.firebaseapp.com",
   databaseURL: "https://habits-9ad15.firebaseio.com",
   storageBucket: "gs://habits-9ad15.appspot.com"

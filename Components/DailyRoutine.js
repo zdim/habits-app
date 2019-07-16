@@ -79,8 +79,8 @@ const styles = StyleSheet.create({
       alignItems: 'center'
     },
     title: {
-        fontSize: 28,
-        paddingBottom: 20
+      fontSize: 28,
+      paddingBottom: 20
     },
     list: {
       paddingLeft: 6,

@@ -1,16 +1,14 @@
 import React from 'react';
 import { TextInput, Button, View, StyleSheet, Alert } from 'react-native';
 import * as Expo from 'expo';
-import firebase from 'firebase'
+import firebase from 'firebase';
+import { ANDROID_CLIENT, IOS_CLIENT } from 'react-native-dotenv';
 
 async function googleAuth() {
-    //1045720847021-o0dj2u79o0g3b9qkbals9554rabil6jj.apps.googleusercontent.com android
-    //1045720847021-3enffihs8ln47gjbpoofh01lhl2h6b3h.apps.googleusercontent.com ios
-
     try {
         const result = await Expo.Google.logInAsync({
-            androidClientId: '1045720847021-o0dj2u79o0g3b9qkbals9554rabil6jj.apps.googleusercontent.com',
-            iosClientId: '1045720847021-3enffihs8ln47gjbpoofh01lhl2h6b3h.apps.googleusercontent.com',
+            androidClientId: `${ANDROID_CLIENT}.apps.googleusercontent.com`,
+            iosClientId: `${IOS_CLIENT}.apps.googleusercontent.com`,
             scopes: [ 'profile', 'email' ]
         });
         return result;        
