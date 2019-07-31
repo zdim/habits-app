@@ -33,7 +33,6 @@ export default class LoginScreen extends React.Component {
         // user is null if logged out - in which case, navigate back to this screen to login
         // TODO: Move the user data creation to the individual sign-in methods since each method has different variables
         firebase.auth().onAuthStateChanged(user => {
-            console.log(user);
             if(user) {
                 const uid = user.uid;
                 if(firebase.database().ref('users/' + uid).once('value', (snapshot) => {
