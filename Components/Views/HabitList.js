@@ -13,7 +13,8 @@ const HabitList = ({ screenProps, navigation }) => {
     container: {
       flex: 1,
       backgroundColor: "#eaf0f9",
-      paddingTop: 20
+      paddingTop: 20,
+      alignItems: "center"
     },
     list: {
       paddingLeft: 6,
@@ -63,7 +64,7 @@ const HabitList = ({ screenProps, navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <View>
         <FlatList
           style={styles.list}
@@ -78,9 +79,7 @@ const HabitList = ({ screenProps, navigation }) => {
               }}
             >
               <View style={styles.box}>
-                <View style={styles.textBackground}>
-                  <Text style={styles.boxTitle}>{item[1].name}</Text>
-                </View>
+                  <Text>{item[1].name}</Text>
               </View>
             </TouchableHighlight>
           )}

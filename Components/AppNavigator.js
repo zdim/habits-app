@@ -1,9 +1,7 @@
-import React from "react";
-import { Image, TouchableOpacity } from "react-native";
 import {
-  createDrawerNavigator,
   createStackNavigator,
-  createSwitchNavigator
+  createSwitchNavigator,
+  createBottomTabNavigator
 } from "react-navigation";
 import HabitList from "./Views/HabitList";
 import HabitDetail from "./Views/HabitDetail";
@@ -14,36 +12,33 @@ import LoginScreen from "./Views/Login";
 import CalendarScreen from "./Views/Calendar";
 import TimePicker from "./Views/TimePicker";
 
-const getNavOptions = title => {
-  return ({ navigation }) => ({
-    headerStyle: { backgroundColor: "#007F10", height: 50 },
-    title: title,
-    headerTitleStyle: { fontSize: 24 },
-    headerTintColor: "white",
-    headerLeft: (
-      <TouchableOpacity style={{paddingLeft: 20}} onPress={() => navigation.toggleDrawer()}>
-        <Image source={require("../resources/icons/menu.png")} />
-      </TouchableOpacity>
-    )
-  });
-};
+const getNavOptions = title => ({
+  headerStyle: { backgroundColor: "#007F10" },
+  title: title,
+  headerTintColor: "white",
+  headerBackTitle: null
+});
 
-const RoutineNavigator = createStackNavigator({
-  Routine: {
-    screen: DailyRoutine,
+const RoutineNavigator = createStackNavigator(
+  {
+    Routine: { screen: DailyRoutine },
+    RoutineEvent: { screen: RoutineEvent },
+    TimePicker: { screen: TimePicker }
+  },
+  {
     navigationOptions: getNavOptions("My Routine")
-  },
-  RoutineEvent: { screen: RoutineEvent },
-  TimePicker: { screen: TimePicker }
-});
+  }
+);
 
-const HabitNavigator = createStackNavigator({
-  HabitList: {
-    screen: HabitList,
-    navigationOptions: getNavOptions("My Habits")
+const HabitNavigator = createStackNavigator(
+  {
+    HabitList: { screen: HabitList },
+    HabitDetail: { screen: HabitDetail }
   },
-  HabitDetail: { screen: HabitDetail }
-});
+  {
+    navigationOptions: getNavOptions("My Habits")
+  }
+);
 
 const CalendarNavigator = createStackNavigator({
   Calendar: {
@@ -59,29 +54,25 @@ const HomeNavigator = createStackNavigator({
   }
 });
 
-const Drawer = createDrawerNavigator({
+const TabNavigator = createBottomTabNavigator({
   Home: {
-    screen: HomeNavigator,
-    navigationOptions: { drawerLabel: "Home" }
+    screen: HomeNavigator
   },
   Habits: {
-    screen: HabitNavigator,
-    navigationOptions: { drawerLabel: "My Habits" }
+    screen: HabitNavigator
   },
   Routine: {
-    screen: RoutineNavigator,
-    navigationOptions: { drawerLabel: "Routine" }
+    screen: RoutineNavigator
   },
   Calendar: {
-    screen: CalendarNavigator,
-    navigationOptions: { drawerLabel: "Calendar" }
+    screen: CalendarNavigator
   }
 });
 
 const MainNavigator = createSwitchNavigator(
   {
     Login: { name: "Login", screen: LoginScreen },
-    Navigator: { name: "Navigator", screen: Drawer }
+    Navigator: { name: "Navigator", screen: TabNavigator }
   },
   {
     initialRouteName: "Login",
