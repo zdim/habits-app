@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { Agenda } from "react-native-calendars";
 import CalendarItem from './CalendarItem';
-import { getLocalTimeFormatted } from "../utils/helpers";
+import { getLocalTimeFormatted } from "../../utils/helpers";
 
 export default class CalendarScreen extends React.Component {
   constructor(props) {
@@ -152,18 +152,7 @@ export default class CalendarScreen extends React.Component {
           renderItem={item => <CalendarItem item={item} eventPressed={this.eventPressed.bind(this)} selectedDate={this.state.selectedDate} />}
           renderEmptyData={this.renderEmptyDate.bind(this)}
           rowHasChanged={this.rowHasChanged.bind(this)}
-          onDayPress={this.onDayChanged.bind(this)}
-          // markingType={'period'}
-          // markedDates={{
-          //    '2017-05-08': {textColor: '#666'},
-          //    '2017-05-09': {textColor: '#666'},
-          //    '2017-05-14': {startingDay: true, endingDay: true, color: 'blue'},
-          //    '2017-05-21': {startingDay: true, color: 'blue'},
-          //    '2017-05-22': {endingDay: true, color: 'gray'},
-          //    '2017-05-24': {startingDay: true, color: 'gray'},
-          //    '2017-05-25': {color: 'gray'},
-          //    '2017-05-26': {endingDay: true, color: 'gray'}}}
-          // theme={{calendarBackground: 'red', agendaKnobColor: 'green'}}
+          onDayPress={this.onDayChanged.bind(this)}          
           //renderDay={(day, item) => (<Text>{day ? day.day : item.name}</Text>)}
         />
     );

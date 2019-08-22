@@ -1,12 +1,12 @@
 import React from "react";
 import {
   Text,
-  Button,
   View,
   FlatList,
   TouchableHighlight,
   StyleSheet
 } from "react-native";
+import FloatingNewButton from "../FloatingNewButton";
 
 export default class DailyRoutine extends React.Component {
   constructor(props) {
@@ -16,10 +16,6 @@ export default class DailyRoutine extends React.Component {
       data: []
     };
   }
-
-  static navigationOptions = {
-    drawerLabel: "Routine"
-  };
 
   componentDidMount = () => {
     const uid = this.props.screenProps.firebase.auth().currentUser.uid;
@@ -49,19 +45,6 @@ export default class DailyRoutine extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Your daily routine</Text>
-        <Button
-          onPress={() => {
-            this.props.navigation.navigate("RoutineEvent", {
-              id: null,
-              name: "",
-              startTime: "00:00",
-              endTime: "00:00"
-            });
-          }}
-          title="Add New"
-          color="blue"
-        />
         <FlatList
           style={styles.list}
           data={this.state.data}
@@ -85,6 +68,13 @@ export default class DailyRoutine extends React.Component {
           ItemSeparatorComponent={this.separator}
           keyExtractor={item => item[1].name}
         />
+        <FloatingNewButton onPress={() => {
+            this.props.navigation.navigate("RoutineEvent", {
+              id: null,
+              name: "",
+              startTime: "00:00",
+              endTime: "00:00"
+            })}} />
       </View>
     );
   }
@@ -95,10 +85,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#eaf0f9",
     alignItems: "center"
-  },
-  title: {
-    fontSize: 28,
-    paddingBottom: 20
   },
   list: {
     paddingLeft: 6,

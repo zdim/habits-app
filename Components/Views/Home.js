@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { View, Text } from 'react-native';
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = {
@@ -9,7 +9,9 @@ export default class HomeScreen extends React.Component {
       
   render() {
     return (
+      <View>
         <Text>HOME PAGE</Text>
+        </View>
     );
   }
 }
