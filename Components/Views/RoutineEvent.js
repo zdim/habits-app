@@ -27,7 +27,7 @@ const RoutineEvent = ({ navigation, screenProps }) => {
         .database()
         .ref("events/" + uid + "/" + id)
         .set({
-          name: name,
+          name: name.trim(),
           startTime: startTime,
           endTime: endTime
         })
@@ -42,7 +42,7 @@ const RoutineEvent = ({ navigation, screenProps }) => {
         .database()
         .ref("events/" + uid)
         .push({
-          name: name,
+          name: name.trim(),
           startTime: startTime,
           endTime: endTime
         })

@@ -29,13 +29,13 @@ const HabitDetail = ({screenProps, navigation}) => {
     const uid = firebase.auth().currentUser.uid;
     if(id) {
         firebase.database().ref('habits/' + uid + '/' + id).set({
-            name: name
+            name: name.trim()
         }).then(() => {
             navigation.goBack(); 
         }).catch((e) => { console.log(e.message); });
     } else {
         firebase.database().ref('habits/' + uid).push({
-            name: name
+            name: name.trim()
         }).then(() => {
             navigation.goBack(); 
         }).catch((e) => { console.log(e.message); });

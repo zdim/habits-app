@@ -1,0 +1,9 @@
+Things:
+    ☐ Delete buttons for Routine and Habits
+    ☐ Style things better
+    ☐ Fix home page to show some data (dashboard, trends, etc.)
+    ☐ Add screen for "free time" blocks
+
+Issues:
+    ☐ Changing days in calendar isn't reloading the events (past days shouldn't show free time)
+    ☐ Fix calendar so the free time only shows in the future (even on the same day)

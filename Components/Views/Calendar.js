@@ -1,8 +1,8 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { Agenda } from "react-native-calendars";
-import CalendarItem from './CalendarItem';
-import { getLocalTimeFormatted } from "../../utils/helpers";
+import CalendarItem from "./CalendarItem";
+import { getLocalTimeFormatted, getCurrentTime } from "../../utils/helpers";
 
 export default class CalendarScreen extends React.Component {
   constructor(props) {
@@ -13,9 +13,9 @@ export default class CalendarScreen extends React.Component {
       habits: null,
       freeTime: [],
       pressedEvent: null,
-      selectedDate: getLocalTimeFormatted()
+      selectedDate: getLocalTimeFormatted(),
     };
-
+    var subscriptions = [];
     this.eventPressed.bind(this);
   }
 
@@ -58,7 +58,7 @@ export default class CalendarScreen extends React.Component {
     });
   }
 
-  componentDidMount() {
+  getEventsAndHabits = () => {
     const uid = this.props.screenProps.firebase.auth().currentUser.uid;
     const getHabits = this.props.screenProps.firebase
       .database()
@@ -75,86 +75,122 @@ export default class CalendarScreen extends React.Component {
         });
       })
       .catch(err => console.log("error building state", err));
+  };
+
+  componentDidMount() {
+    const nav = this.props.navigation;
+
+    subscriptions = [
+      nav.addListener("willFocus", payload => {
+        this.getEventsAndHabits();
+      }),
+      nav.addListener("didBlur", payload => {
+        this.setState({ combinedItems: {} })
+      })
+    ]
+  }
+
+  componentWillUnmount() {
+    subscriptions.forEach(n => n.remove());
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if(this.state.pressedEvent) {
-      const event = this.state.habits.find(h => h[0] == this.state.pressedEvent);
+    if (this.state.pressedEvent) {
+      const event = this.state.habits.find(
+        h => h[0] == this.state.pressedEvent
+      );
+      if(!event) return;
       const daysCompleted = event[1].daysCompleted;
       const uid = this.props.screenProps.firebase.auth().currentUser.uid;
       this.props.screenProps.firebase
         .database()
         .ref(`events/${uid}/${this.state.pressedEvent}/daysCompleted`)
         .set(daysCompleted)
-        .then(() => {
-          
-        })
+        .then(() => {})
         .catch(e => {
           console.log(e.message);
         });
-        this.setState({pressedEvent: null});
+      this.setState({ pressedEvent: null });
     }
   }
 
   buildItemsList(habits, events, date = this.state.selectedDate) {
-    let eventsSelectedDate = events[date] ? [...events[date]] : []; 
-    let combinedItemsForSelectedDate = eventsSelectedDate.concat(habits);    
+    let eventsSelectedDate = events[date] ? [...events[date]] : [];
+    let combinedItemsForSelectedDate = eventsSelectedDate.concat(habits);
     let sortedItems = combinedItemsForSelectedDate.sort(
       (a, b) =>
-      new Date("1970/01/01 " + a[1].startTime) -
-      new Date("1970/01/01 " + b[1].startTime)
+        new Date("1970/01/01 " + a[1].startTime) -
+        new Date("1970/01/01 " + b[1].startTime)
     );
-     
+
     // if selected date is in the past we don't add free time
-    if(new Date(date + '00:00') - new Date() < 0) {
+    const dateComparer = new Date(date) - new Date(getLocalTimeFormatted());
+    if (dateComparer < 0) {
       return { [date]: sortedItems };
-    }  
+    }
 
     // in here we'll add the "free time" items that can be pressed and converted into habits
     var itemsWithFreeTime = [sortedItems[0]];
 
-    for(var i = 0; i < sortedItems.length - 2; i++) {
+    for (let i = 0; i < sortedItems.length - 1; i++) {
       const currentItemEnd = sortedItems[i][1].endTime;
       const nextItemStart = sortedItems[i + 1][1].startTime;
-      const minuteDifference = this.getMinutesSinceMidnight(nextItemStart) - this.getMinutesSinceMidnight(currentItemEnd);
-      console.log(minuteDifference);
-      if(minuteDifference >= 60) {
-        const freeTimeBlock = [ 'Free Time', { name: 'Free Time', startTime: currentItemEnd, endTime: nextItemStart}];
+      const minuteDifference =
+        this.getMinutesSinceMidnight(nextItemStart) -
+        this.getMinutesSinceMidnight(currentItemEnd);
+      if (minuteDifference >= 60) {
+        const freeTimeBlock = [
+          "Free Time",
+          {
+            name: "Free Time",
+            startTime: currentItemEnd,
+            endTime: nextItemStart
+          }
+        ];
         itemsWithFreeTime.push(freeTimeBlock, sortedItems[i + 1]);
       } else {
         itemsWithFreeTime.push(sortedItems[i + 1]);
       }
     }
 
-    console.log(itemsWithFreeTime);
-      
     return { [date]: itemsWithFreeTime };
   }
 
   getMinutesSinceMidnight(time) {
-    var c = time.split(':');
+    var c = time.split(":");
     return parseInt(c[0]) * 60 + parseInt(c[1]);
   }
 
   onDayChanged(day) {
+    console.log(day);
     this.setState({
       selectedDate: day.dateString,
-      combinedItems: this.buildItemsList(this.state.habits, this.state.events, day.dateString)
+      combinedItems: this.buildItemsList(
+        this.state.habits,
+        this.state.events,
+        day.dateString
+      )
     });
   }
 
   render() {
     return (
-        <Agenda
-          items={this.state.combinedItems}
-          //loadItemsForMonth={this.loadItems.bind(this)}
-          selected={this.state.selectedDate}
-          renderItem={item => <CalendarItem item={item} eventPressed={this.eventPressed.bind(this)} selectedDate={this.state.selectedDate} />}
-          renderEmptyData={this.renderEmptyDate.bind(this)}
-          rowHasChanged={this.rowHasChanged.bind(this)}
-          onDayPress={this.onDayChanged.bind(this)}          
-          //renderDay={(day, item) => (<Text>{day ? day.day : item.name}</Text>)}
-        />
+      <Agenda
+        items={this.state.combinedItems}
+        //loadItemsForMonth={this.loadItems.bind(this)}
+        selected={this.state.selectedDate}
+        renderItem={item => (
+          <CalendarItem
+            item={item}
+            eventPressed={this.eventPressed.bind(this)}
+            selectedDate={this.state.selectedDate}
+          />
+        )}
+        //renderEmptyData={this.renderEmptyDate.bind(this)}
+        rowHasChanged={this.rowHasChanged.bind(this)}
+        onDayPress={this.onDayChanged.bind(this)}
+        //renderDay={(day, item) => (<Text>{day ? day.day : item.name}</Text>)}
+      />
     );
   }
 
@@ -190,7 +226,9 @@ export default class CalendarScreen extends React.Component {
       if (!newItem[1].daysCompleted) {
         newItem[1].daysCompleted = [this.state.selectedDate];
       } else {
-        let dateIndex = newItem[1].daysCompleted.indexOf(this.state.selectedDate);
+        let dateIndex = newItem[1].daysCompleted.indexOf(
+          this.state.selectedDate
+        );
         if (dateIndex > -1) {
           newItem[1].daysCompleted.splice(dateIndex, 1);
         } else {
@@ -198,8 +236,8 @@ export default class CalendarScreen extends React.Component {
         }
       }
       const index = this.state.habits.findIndex(h => h[0] === item[0]);
-      let newHabits = Object.assign([...this.state.habits], {index: newItem});
-      this.setState({ 
+      let newHabits = Object.assign([...this.state.habits], { index: newItem });
+      this.setState({
         habits: newHabits,
         pressedEvent: newItem[0],
         combinedItems: this.buildItemsList(newHabits, this.state.events)
@@ -236,6 +274,11 @@ export default class CalendarScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
   emptyDate: {
     height: 15,
     flex: 1,

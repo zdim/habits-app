@@ -1,12 +1,12 @@
 import React from 'react';
-import { TextInput, Button, View, StyleSheet, Alert } from 'react-native';
-import * as Expo from 'expo';
+import { TextInput, Button, View, StyleSheet, Alert, AsyncStorage } from 'react-native';
+import * as Google from 'expo-google-app-auth';
 import firebase from 'firebase';
 import { ANDROID_CLIENT, IOS_CLIENT } from 'react-native-dotenv';
 
 async function googleAuth() {
     try {
-        const result = await Expo.Google.logInAsync({
+        const result = await Google.logInAsync({
             androidClientId: `${ANDROID_CLIENT}.apps.googleusercontent.com`,
             iosClientId: `${IOS_CLIENT}.apps.googleusercontent.com`,
             scopes: [ 'profile', 'email' ]
@@ -17,12 +17,34 @@ async function googleAuth() {
     }
 }
 
+const getToken = async () => {
+    try {
+        await AsyncStorage.getItem('user', (err, res) => {
+            if (err) {
+                console.error('Error loading user data from storage', err);
+            } else if (res) {
+                console.log('getToken: ', res);
+                const user = JSON.parse(res);
+                firebase.auth().signInWithCredential(user)
+            }
+        });
+    } catch (error) {
+        console.error('Error loading user data from storage', error);
+    }
+}
+
+const storeToken = async (user) => {
+    try {
+        await AsyncStorage.setItem('user', JSON.stringify(user));
+    } catch (error) {
+        console.error('Error storing user data', error);
+    }
+}
+
 export default class LoginScreen extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-
-        };
+        this.state = { };
     }
 
     static navigationOptions = {
@@ -32,6 +54,8 @@ export default class LoginScreen extends React.Component {
     componentDidMount = () => {
         // user is null if logged out - in which case, navigate back to this screen to login
         // TODO: Move the user data creation to the individual sign-in methods since each method has different variables
+        getToken();
+
         firebase.auth().onAuthStateChanged(user => {
             if(user) {
                 const uid = user.uid;
@@ -65,8 +89,9 @@ export default class LoginScreen extends React.Component {
             .then((result) => {
                 console.log(result);
                 const credential = firebase.auth.GoogleAuthProvider.credential(result.idToken || null);
-                this.props.screenProps.firebase.auth().signInAndRetrieveDataWithCredential(credential)
+                this.props.screenProps.firebase.auth().signInWithCredential(credential)
                     .catch((error) => { Alert.alert(error.message); console.log(error); });
+                storeToken(credential);
             })
             .catch((error) => { Alert.alert(error.message); console.log(error); });
     }
